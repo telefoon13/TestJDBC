@@ -45,7 +45,6 @@ public class Bank {
 					System.out.println("Nieuwe rekening is aangemaakt.");
 				}
 			}
-			
 			break;
 		
 		//Saldo controleren
@@ -78,6 +77,7 @@ public class Bank {
 			System.out.println("Hoeveel wilt u overschrijven ?");
 			BigDecimal bedrag = scanner.nextBigDecimal();
 			boolean fout = false;
+			BigDecimal onderNul = BigDecimal.ZERO;
 			
 			if (VanNrekNR == NaarNrekNR){
 				System.err.println("Je kan niet naar je zelf overschrijven.");
@@ -89,8 +89,8 @@ public class Bank {
 					statement3.setLong(1, VanNrekNR);
 					try(ResultSet resultSet = statement3.executeQuery()){
 						if (resultSet.next()){
-							if (resultSet.getBigDecimal("saldo").compareTo(bedrag) < 0){
-								System.err.println("Het saldo op de rekening is niet voldoende.");
+							if ((resultSet.getBigDecimal("saldo").compareTo(bedrag) < 0) || bedrag.compareTo(onderNul) < 0){
+								System.err.println("Het saldo op de rekening is niet voldoende. Of je hebt een negatief getal ingegeven.");
 								fout = true;
 							}
 						} else if (!resultSet.next()){
@@ -129,6 +129,7 @@ public class Bank {
 			}
 			break;
 
+		//keuze niet 1, 2 of 3
 		default:
 			break;
 		}
